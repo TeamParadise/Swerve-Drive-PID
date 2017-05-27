@@ -16,19 +16,19 @@ public class RobotMap
 	public static final double[][] DISTANCES =
 	{
 		{ WIDTH/2, LENGTH/2 },
-		{ WIDTH/2, -LENGTH/2 },
-		{ -WIDTH/2, -LENGTH/2 },
 		{ -WIDTH/2, LENGTH/2 },
+		{ -WIDTH/2, -LENGTH/2 },
+		{ WIDTH/2, -LENGTH/2 },
 	};
 	
 	public static final int JOYSTICK_PORT = 0;
 
 	public static final int[][] CANTALON_DRIVE_PORTS =
 	{
-		{ 0, 1 },
-		{ 2, 3 },
-		{ 4, 5 },
-		{ 6, 7 }
+		{ 0, 1, 0, 1 },
+		{ 2, 3, 2, 3 },
+		{ 4, 5, 7, 8 },
+		{ 6, 7, 4, 5 }
 	};
 
 }

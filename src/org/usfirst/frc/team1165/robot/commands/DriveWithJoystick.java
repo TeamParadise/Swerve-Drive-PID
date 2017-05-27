@@ -13,6 +13,7 @@ public class DriveWithJoystick extends Command
 	{
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.driveTrain);
+		requires(Robot.encoderPID);
 	}
 
 	// Called just before this Command runs the first time
@@ -26,7 +27,7 @@ public class DriveWithJoystick extends Command
 	protected void execute()
 	{
 		double x = Math.pow(Robot.oi.stick.getX(), 3);
-		double y = Math.pow(Robot.oi.stick.getY(), 3);
+		double y = -Math.pow(Robot.oi.stick.getY(), 3);
 		double twist = Math.pow(Robot.oi.stick.getTwist(), 3);
 		
 		if (Math.abs(x) < .1)
