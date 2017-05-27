@@ -1,35 +1,49 @@
 package util;
 
-import org.usfirst.frc.team1165.robot.Robot;
 import org.usfirst.frc.team1165.robot.RobotMap;
 
 import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class SwerveModule
+public class SwerveModule extends PIDSubsystem
 {
+	private static final double kP = 0.01;
+	private static final double kI = 0.00;
+	private static final double kD = 0.00;
+
+	private static final double TOLERANCE = 10;
+	
 	private int id;
 	private double speed = 0;
 	private double angle = 0;
 
-	CANTalon translationMotor;
-	CANTalon rotationMotor;
+	private CANTalon translationMotor;
+	private CANTalon rotationMotor;
 
-	public Encoder encoder;
+	private Encoder encoder;
 
-	public SwerveModule(int id, int[] ports)
+	public SwerveModule(int id)
 	{
+		super(kP, kI, kD);
+		setInputRange(-360, 360);
+    	setOutputRange(-1, 1);
+    	setAbsoluteTolerance(TOLERANCE);
+    	getPIDController().setContinuous(true);
+    	
 		this.id = id;
-		translationMotor = new CANTalon(ports[0]);
-		rotationMotor = new CANTalon(ports[1]);
-
-		encoder = new Encoder(ports[2], ports[3], false, EncodingType.k4X);
+		translationMotor = new CANTalon(RobotMap.CANTALON_DRIVE_PORTS[id][0]);
+		rotationMotor = new CANTalon(RobotMap.CANTALON_DRIVE_PORTS[id][1]);
+		
+		encoder = new Encoder(RobotMap.CANTALON_DRIVE_PORTS[id][2], RobotMap.CANTALON_DRIVE_PORTS[id][3], false, EncodingType.k4X);
+		
+		enable();
 	}
 
 	public void driveModule(double x, double y, double twist)
@@ -40,42 +54,32 @@ public class SwerveModule
 		speed = Math.sqrt(wx * wx + wy * wy) / Swerve.getMax(twist);
 		angle = Math.atan2(wy, wx) * 180 / Math.PI;
 
-		Robot.encoderPID.setSetpoint(angle);
-		Robot.encoderPID.setEncoderID(id);
-		Robot.encoderPID.enable();
-		
-		rotationMotor.set(Robot.encoderPID.getOutput());
-		
-//		translationMotor.set(speed);
-//		setAngle(angle);
-	}
-
-	public void setAngle(double setpoint)
-	{
-		double power = 1;
-		double tolerance = 10;
-//		if (id == 2)
-//		{
-//			power = 0.5;
-//			tolerance = 20;
-//		}
-		if (Math.abs(setpoint - encoder.get()) > tolerance)
-		{
-			SmartDashboard.putNumber("Error", Math.abs(setpoint - encoder.get()));
-			if (setpoint > encoder.get())
-				rotationMotor.set(power);
-			else if (setpoint < encoder.get())
-				rotationMotor.set(-power);
-		} else
-			rotationMotor.set(0);
+		translationMotor.set(speed);
+		if(Math.abs(encoder.get() - angle) > 10)
+			setSetpoint(angle);		
 	}
 
 	public void report()
 	{
 		SmartDashboard.putNumber("Swerve Module " + id + " Speed", speed);
 		SmartDashboard.putNumber("Swerve Module " + id + " Angle", angle);
-
-		// Encoder Stuff
 		SmartDashboard.putNumber("Swerve Module " + id + " Encoder Value", encoder.get());
+	}
+
+	@Override
+	protected double returnPIDInput()
+	{
+		return encoder.get();
+	}
+
+	@Override
+	protected void usePIDOutput(double output)
+	{
+		rotationMotor.set(output);
+	}
+
+	@Override
+	protected void initDefaultCommand()
+	{
 	}
 }

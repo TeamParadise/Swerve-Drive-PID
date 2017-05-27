@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team1165.robot.commands.DriveWithJoystick;
 import org.usfirst.frc.team1165.robot.subsystems.DriveTrain;
-import org.usfirst.frc.team1165.robot.subsystems.EncoderPID;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -22,7 +21,6 @@ public class Robot extends IterativeRobot
 {
 
 	public static final DriveTrain driveTrain = new DriveTrain();
-	public static final EncoderPID encoderPID = new EncoderPID();
 	public static OI oi;
 
 	Command autonomousCommand;

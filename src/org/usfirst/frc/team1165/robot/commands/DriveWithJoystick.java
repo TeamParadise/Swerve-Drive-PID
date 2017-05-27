@@ -13,13 +13,13 @@ public class DriveWithJoystick extends Command
 	{
 		// Use requires() here to declare subsystem dependencies
 		requires(Robot.driveTrain);
-		requires(Robot.encoderPID);
 	}
 
 	// Called just before this Command runs the first time
 	@Override
 	protected void initialize()
 	{
+		
 	}
 
 	// Called repeatedly when this Command is scheduled to run
