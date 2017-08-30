@@ -17,7 +17,7 @@ public class DriveTrain extends Subsystem
 	{
 		modules = new SwerveModule[RobotMap.NUMBER_OF_WHEELS];
 		for(int i = 0; i < RobotMap.NUMBER_OF_WHEELS;i++)
-			modules[i] = new SwerveModule(i); 
+			modules[i] = new SwerveModule(i, RobotMap.CANTALON_DRIVE_PORTS[i][2]);
 	}
 
 	public void initDefaultCommand()
@@ -27,10 +27,16 @@ public class DriveTrain extends Subsystem
 	
 	public void drive(double x, double y, double twist)
 	{
-		for(int i=0;i<RobotMap.NUMBER_OF_WHEELS;i++)
+		for(int i=0; i < RobotMap.NUMBER_OF_WHEELS; i++)
 		{
 			modules[i].driveModule(x, y, twist);
 			modules[i].report();
 		}
+	}
+	
+	public void reset()
+	{
+		for(int i=0; i < RobotMap.NUMBER_OF_WHEELS; i++)
+			modules[i].reset();
 	}
 }

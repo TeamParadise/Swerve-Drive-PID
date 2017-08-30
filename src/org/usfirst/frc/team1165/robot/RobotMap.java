@@ -25,10 +25,11 @@ public class RobotMap
 
 	public static final int[][] CANTALON_DRIVE_PORTS =
 	{
-		{ 0, 1, 0, 1 },
-		{ 2, 3, 2, 3 },
-		{ 4, 5, 6, 7 },
-		{ 6, 7, 4, 5 }
+		// translation talon, rotation talon, encoder port
+		{ 0, 1, 1 },
+		{ 2, 3, 0 },
+		{ 4, 5, 3 },
+		{ 6, 7, 2 }
 	};
 
 }

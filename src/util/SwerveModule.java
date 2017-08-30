@@ -4,8 +4,8 @@ import org.usfirst.frc.team1165.robot.RobotMap;
 
 import com.ctre.CANTalon;
 
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -20,16 +20,18 @@ public class SwerveModule extends PIDSubsystem
 
 	private static final double TOLERANCE = 10;
 	
-	private int id;
+	private int id = 0;
+
 	private double speed = 0;
 	private double angle = 0;
 
 	private CANTalon translationMotor;
 	private CANTalon rotationMotor;
-
-	private Encoder encoder;
-
-	public SwerveModule(int id)
+	
+	private AnalogInput analogInput;
+	private AnalogPotentiometer encoder;
+	
+	public SwerveModule(int id, int analogInputPort)
 	{
 		super(kP, kI, kD);
 		setInputRange(-360, 360);
@@ -38,10 +40,14 @@ public class SwerveModule extends PIDSubsystem
     	getPIDController().setContinuous(true);
     	
 		this.id = id;
+		
 		translationMotor = new CANTalon(RobotMap.CANTALON_DRIVE_PORTS[id][0]);
 		rotationMotor = new CANTalon(RobotMap.CANTALON_DRIVE_PORTS[id][1]);
 		
-		encoder = new Encoder(RobotMap.CANTALON_DRIVE_PORTS[id][2], RobotMap.CANTALON_DRIVE_PORTS[id][3], false, EncodingType.k4X);
+		analogInput = new AnalogInput(analogInputPort);
+
+//		analogInput = new AnalogInput(RobotMap.CANTALON_DRIVE_PORTS[id][2]);		
+		encoder = new AnalogPotentiometer(analogInput, 360.0, 0);
 		
 		enable();
 	}
@@ -49,21 +55,28 @@ public class SwerveModule extends PIDSubsystem
 	public void driveModule(double x, double y, double twist)
 	{
 		double wx = x + twist * RobotMap.DISTANCES[id][1];
-		double wy = y - twist * RobotMap.DISTANCES[id][0];
+	 	double wy = y - twist * RobotMap.DISTANCES[id][0];
 		
 		speed = Math.sqrt(wx * wx + wy * wy) / Swerve.getMax(twist);
 		angle = Math.atan2(wy, wx) * 180 / Math.PI;
 
 		translationMotor.set(speed);
 		if(Math.abs(encoder.get() - angle) > 10)
-			setSetpoint(angle);		
+			setSetpoint(angle);
 	}
 
+	public void reset()
+	{
+//		encoder.reset();
+	}
+	
 	public void report()
 	{
 		SmartDashboard.putNumber("Swerve Module " + id + " Speed", speed);
 		SmartDashboard.putNumber("Swerve Module " + id + " Angle", angle);
-		SmartDashboard.putNumber("Swerve Module " + id + " Encoder Value", encoder.get());
+		
+		if (encoder != null)
+			SmartDashboard.putNumber("Swerve Module " + id + " Encoder Value", encoder.get());
 	}
 
 	@Override

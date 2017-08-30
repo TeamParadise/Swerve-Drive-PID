@@ -1,6 +1,7 @@
 
 package org.usfirst.frc.team1165.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team1165.robot.commands.DriveWithJoystick;
 import org.usfirst.frc.team1165.robot.subsystems.DriveTrain;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -19,7 +21,6 @@ import org.usfirst.frc.team1165.robot.subsystems.DriveTrain;
  */
 public class Robot extends IterativeRobot
 {
-
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static OI oi;
 
@@ -47,7 +48,6 @@ public class Robot extends IterativeRobot
 	@Override
 	public void disabledInit()
 	{
-
 	}
 
 	@Override
@@ -96,6 +96,8 @@ public class Robot extends IterativeRobot
 	@Override
 	public void teleopInit()
 	{
+		Robot.driveTrain.reset();
+		
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
@@ -109,7 +111,7 @@ public class Robot extends IterativeRobot
 	 */
 	@Override
 	public void teleopPeriodic()
-	{
+	{		
 		Scheduler.getInstance().run();
 	}
 
