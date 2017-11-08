@@ -1,9 +1,11 @@
 package org.usfirst.frc.team1165.robot.subsystems;
 
+import org.usfirst.frc.team1165.robot.Robot;
 import org.usfirst.frc.team1165.robot.RobotMap;
 import org.usfirst.frc.team1165.robot.commands.DriveWithJoystick;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import util.SwerveModule;
 
 /**
@@ -28,15 +30,20 @@ public class DriveTrain extends Subsystem
 	public void drive(double x, double y, double twist)
 	{
 		for(int i=0; i < RobotMap.NUMBER_OF_WHEELS; i++)
-		{
 			modules[i].driveModule(x, y, twist);
-			modules[i].report();
-		}
+		report();
 	}
 	
 	public void reset()
 	{
-		for(int i=0; i < RobotMap.NUMBER_OF_WHEELS; i++)
-			modules[i].reset();
+		for(int i=0;i<RobotMap.NUMBER_OF_WHEELS;i++)	
+			modules[i].resetEncoder();
+		report();
+	}
+	
+	public void report()
+	{
+		for(int i=0;i<RobotMap.NUMBER_OF_WHEELS;i++)
+			modules[i].report();
 	}
 }

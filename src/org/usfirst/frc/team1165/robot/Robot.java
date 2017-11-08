@@ -35,9 +35,9 @@ public class Robot extends IterativeRobot
 	public void robotInit()
 	{
 		oi = new OI();
-		chooser.addDefault("Default Auto", new DriveWithJoystick());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", chooser);
+//		chooser.addDefault("Default Auto", new DriveWithJoystick());
+//		chooser.addObject("My Auto", new MyAutoCommand());
+//		SmartDashboard.putData("Auto mode", chooser);
 	}
 
 	/**
@@ -96,8 +96,6 @@ public class Robot extends IterativeRobot
 	@Override
 	public void teleopInit()
 	{
-		Robot.driveTrain.reset();
-		
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove

@@ -6,6 +6,7 @@ import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -24,6 +25,8 @@ public class SwerveModule extends PIDSubsystem
 
 	private double speed = 0;
 	private double angle = 0;
+	
+	private double heading = 0;
 
 	private CANTalon translationMotor;
 	private CANTalon rotationMotor;
@@ -48,41 +51,51 @@ public class SwerveModule extends PIDSubsystem
 
 //		analogInput = new AnalogInput(RobotMap.CANTALON_DRIVE_PORTS[id][2]);		
 		encoder = new AnalogPotentiometer(analogInput, 360.0, 0);
-		
+
 		enable();
+	}
+	
+	public void updateHeading()
+	{
+		double initialValue = 360 - RobotMap.RESET_ENCODERS[id];
+		heading = ( (encoder.get() + initialValue) % 360 ) - 90;
 	}
 
 	public void driveModule(double x, double y, double twist)
 	{
 		double wx = x + twist * RobotMap.DISTANCES[id][1];
 	 	double wy = y - twist * RobotMap.DISTANCES[id][0];
-		
+
 		speed = Math.sqrt(wx * wx + wy * wy) / Swerve.getMax(twist);
-		angle = Math.atan2(wy, wx) * 180 / Math.PI;
+		angle = ( Math.atan2(wy, wx) * 180 / Math.PI ) + 180;
 
-		translationMotor.set(speed);
-		if(Math.abs(encoder.get() - angle) > 10)
+		updateHeading();
+
+//		translationMotor.set(speed);
+		if(Math.abs(heading - angle) > 10)
 			setSetpoint(angle);
-	}
-
-	public void reset()
-	{
-//		encoder.reset();
 	}
 	
 	public void report()
 	{
 		SmartDashboard.putNumber("Swerve Module " + id + " Speed", speed);
 		SmartDashboard.putNumber("Swerve Module " + id + " Angle", angle);
-		
-		if (encoder != null)
-			SmartDashboard.putNumber("Swerve Module " + id + " Encoder Value", encoder.get());
+		SmartDashboard.putNumber("Swerve Module " + id + " Heading", heading);
 	}
 
+	public void resetEncoder()
+	{
+		angle = 0;
+
+		updateHeading();
+		if(Math.abs(heading - angle) > 10)
+			setSetpoint(angle);
+	}
+	
 	@Override
 	protected double returnPIDInput()
 	{
-		return encoder.get();
+		return heading;
 	}
 
 	@Override

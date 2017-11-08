@@ -3,15 +3,14 @@ package org.usfirst.frc.team1165.robot.commands;
 import org.usfirst.frc.team1165.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class ResetEncoders extends Command {
+public class KillAllCommands extends Command {
 
-    public ResetEncoders() {
-         requires(Robot.driveTrain);
+    public KillAllCommands() {
+        requires(Robot.driveTrain);
     }
 
     // Called just before this Command runs the first time
@@ -20,8 +19,6 @@ public class ResetEncoders extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.driveTrain.reset();
-    	Robot.driveTrain.report();
     }
 
     // Make this return true when this Command no longer needs to run execute()
