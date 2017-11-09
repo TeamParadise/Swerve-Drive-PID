@@ -6,7 +6,6 @@ import com.ctre.CANTalon;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -37,7 +36,7 @@ public class SwerveModule extends PIDSubsystem
 	public SwerveModule(int id, int analogInputPort)
 	{
 		super(kP, kI, kD);
-		setInputRange(-360, 360);
+		setInputRange(0, 360);
     	setOutputRange(-1, 1);
     	setAbsoluteTolerance(TOLERANCE);
     	getPIDController().setContinuous(true);
@@ -49,7 +48,7 @@ public class SwerveModule extends PIDSubsystem
 		
 		analogInput = new AnalogInput(analogInputPort);
 
-//		analogInput = new AnalogInput(RobotMap.CANTALON_DRIVE_PORTS[id][2]);		
+//		analogInput = new AnalogInput(RobotMap.CANTALON_DRIVE_PORTS[id][2]);
 		encoder = new AnalogPotentiometer(analogInput, 360.0, 0);
 
 		enable();
@@ -58,7 +57,14 @@ public class SwerveModule extends PIDSubsystem
 	public void updateHeading()
 	{
 		double initialValue = 360 - RobotMap.RESET_ENCODERS[id];
-		heading = ( (encoder.get() + initialValue) % 360 ) - 90;
+		heading = (encoder.get() + initialValue) % 360;
+	}
+
+	public void resetEncoder()
+	{
+		angle = 0;
+
+		driveModuleTo(0, angle);
 	}
 
 	public void driveModule(double x, double y, double twist)
@@ -69,9 +75,18 @@ public class SwerveModule extends PIDSubsystem
 		speed = Math.sqrt(wx * wx + wy * wy) / Swerve.getMax(twist);
 		angle = ( Math.atan2(wy, wx) * 180 / Math.PI ) + 180;
 
+		driveModuleTo(speed, angle);
+	}
+	
+	public void driveModuleTo(double speed, double angle)
+	{
 		updateHeading();
-
-//		translationMotor.set(speed);
+		
+		this.speed = speed;
+		this.angle = angle;
+		
+//		translationMotor.set(Math.pow(speed, 3));
+		translationMotor.set(speed);
 		if(Math.abs(heading - angle) > 10)
 			setSetpoint(angle);
 	}
@@ -81,17 +96,8 @@ public class SwerveModule extends PIDSubsystem
 		SmartDashboard.putNumber("Swerve Module " + id + " Speed", speed);
 		SmartDashboard.putNumber("Swerve Module " + id + " Angle", angle);
 		SmartDashboard.putNumber("Swerve Module " + id + " Heading", heading);
+		SmartDashboard.putNumber("Swerve Module " + id + " Encoder", encoder.get());
 	}
-
-	public void resetEncoder()
-	{
-		angle = 0;
-
-		updateHeading();
-		if(Math.abs(heading - angle) > 10)
-			setSetpoint(angle);
-	}
-	
 	@Override
 	protected double returnPIDInput()
 	{
@@ -101,6 +107,7 @@ public class SwerveModule extends PIDSubsystem
 	@Override
 	protected void usePIDOutput(double output)
 	{
+//		rotationMotor.set(Math.pow(output, 3));
 		rotationMotor.set(output);
 	}
 

@@ -1,15 +1,13 @@
 
 package org.usfirst.frc.team1165.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team1165.robot.commands.DriveWithJoystick;
+import org.usfirst.frc.team1165.robot.commandgroups.AutoTest1;
 import org.usfirst.frc.team1165.robot.subsystems.DriveTrain;
 
 /**
@@ -70,7 +68,7 @@ public class Robot extends IterativeRobot
 	@Override
 	public void autonomousInit()
 	{
-		autonomousCommand = chooser.getSelected();
+		autonomousCommand = new AutoTest1();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",

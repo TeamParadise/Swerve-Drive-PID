@@ -7,10 +7,17 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ResetEncoders extends Command {
+public class DriveStraight extends Command {
 
-    public ResetEncoders() {
-         requires(Robot.driveTrain);
+	private double speed;
+	private double angle;
+	
+    public DriveStraight(double speed, double angle)
+    {
+    	requires(Robot.driveTrain);
+    	
+    	this.speed = speed;
+    	this.angle = angle;
     }
 
     // Called just before this Command runs the first time
@@ -19,8 +26,7 @@ public class ResetEncoders extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.driveTrain.reset();
-    	Robot.driveTrain.report();
+    	Robot.driveTrain.driveTo(speed, angle - 90);
     }
 
     // Make this return true when this Command no longer needs to run execute()

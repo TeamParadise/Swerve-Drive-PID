@@ -32,5 +32,5 @@ public class RobotMap
 		{ 6, 7, 3 }
 	};
 
-	public static final int[] RESET_ENCODERS = { 358, 197, 79, 152 };
+	public static final int[] RESET_ENCODERS = { 268, 107, 349, 330 };//358, 197, 79, 152 };
 }
