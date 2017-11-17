@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team1165.robot.commandgroups.AutoTest1;
 import org.usfirst.frc.team1165.robot.subsystems.DriveTrain;
@@ -33,8 +34,7 @@ public class Robot extends IterativeRobot
 	public void robotInit()
 	{
 		oi = new OI();
-//		chooser.addDefault("Default Auto", new DriveWithJoystick());
-//		chooser.addObject("My Auto", new MyAutoCommand());
+//		chooser.addDefault("Auto 1", new AutoTest1());
 //		SmartDashboard.putData("Auto mode", chooser);
 	}
 

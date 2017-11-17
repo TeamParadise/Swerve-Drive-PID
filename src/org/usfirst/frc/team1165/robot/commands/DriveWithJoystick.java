@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1165.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team1165.robot.Robot;
 
@@ -25,16 +26,21 @@ public class DriveWithJoystick extends Command
 	@Override
 	protected void execute()
 	{
-		double x = Math.pow(Robot.oi.stick.getX(), 3);
-		double y = -Math.pow(Robot.oi.stick.getY(), 3);
+//		double x = Math.pow(Robot.oi.stick.getX(), 3);
+//		double y = -Math.pow(Robot.oi.stick.getY(), 3);
+//		double twist = Math.pow(Robot.oi.stick.getTwist(), 3);
+		
+		double x = Robot.oi.stick.getX();
+		double y = -Robot.oi.stick.getY();
 		double twist = Math.pow(Robot.oi.stick.getTwist(), 3);
 		
-		if (Math.abs(x) < .1)
-			x = 0;
-		if (Math.abs(y) < .1)
-			y = 0;
-		if (Math.abs(twist) < .1)
-			twist = 0;
+		if (Math.abs(x) < .1) x = 0;
+		if (Math.abs(y) < .1) y = 0;
+		if (Math.abs(twist) < .1) twist = 0;
+
+		SmartDashboard.putNumber("X", x);
+		SmartDashboard.putNumber("Y", y);
+		SmartDashboard.putNumber("Twist", twist);
 
 		Robot.driveTrain.drive(x, y, twist);
 	}

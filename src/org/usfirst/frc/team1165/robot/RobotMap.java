@@ -18,7 +18,7 @@ public class RobotMap
 		{ WIDTH/2, LENGTH/2 },
 		{ -WIDTH/2, LENGTH/2 },
 		{ -WIDTH/2, -LENGTH/2 },
-		{ WIDTH/2, -LENGTH/2 },
+		{ WIDTH/2, -LENGTH/2 }
 	};
 	
 	public static final int JOYSTICK_PORT = 0;
@@ -31,6 +31,9 @@ public class RobotMap
 		{ 4, 5, 2 },
 		{ 6, 7, 3 }
 	};
-
-	public static final int[] RESET_ENCODERS = { 268, 107, 349, 330 };//358, 197, 79, 152 };
+	
+	public static final int[] RESET_ENCODERS = { 279, 95, 350, 82 }; // twist works
+//	public static final int[] RESET_ENCODERS = { 189, 5, 260, 352 }; // twist does not work
+//	public static final int[] RESET_ENCODERS = { 99, 275, 170, 262 }; // twist works
+//	public static final int[] RESET_ENCODERS = { 9, 185, 80, 172 }; // twist does not work
 }

@@ -18,7 +18,7 @@ public class SwerveModule extends PIDSubsystem
 	private static final double kI = 0.00;
 	private static final double kD = 0.00;
 
-	private static final double TOLERANCE = 10;
+	private static final double TOLERANCE = 5;
 	
 	private int id = 0;
 
@@ -68,14 +68,18 @@ public class SwerveModule extends PIDSubsystem
 	}
 
 	public void driveModule(double x, double y, double twist)
-	{
+	{		
 		double wx = x + twist * RobotMap.DISTANCES[id][1];
-	 	double wy = y - twist * RobotMap.DISTANCES[id][0];
+		double wy = y - twist * RobotMap.DISTANCES[id][0];
 
 		speed = Math.sqrt(wx * wx + wy * wy) / Swerve.getMax(twist);
-		angle = ( Math.atan2(wy, wx) * 180 / Math.PI ) + 180;
+//		angle = Math.atan2(wy, wx) * 180 / Math.PI + 180;
+		
+		// the point of this is to map the joystick so forward is 0/360 not 270
+		// this reaches -90, fix that.
+		angle = (270 - (Math.atan2(wy, wx) * 180 / Math.PI + 180)) % 360;
 
-		driveModuleTo(speed, angle);
+		driveModuleTo(Math.pow(speed, 3), angle);
 	}
 	
 	public void driveModuleTo(double speed, double angle)
@@ -85,9 +89,14 @@ public class SwerveModule extends PIDSubsystem
 		this.speed = speed;
 		this.angle = angle;
 		
-//		translationMotor.set(Math.pow(speed, 3));
-		translationMotor.set(speed);
-		if(Math.abs(heading - angle) > 10)
+		
+//		if(Math.abs(heading - angle) <= TOLERANCE)
+//			translationMotor.set(Math.pow(speed, 3));
+			translationMotor.set(speed);
+//		else
+//			translationMotor.set(0);
+		
+		if(Math.abs(heading - angle) >= TOLERANCE)
 			setSetpoint(angle);
 	}
 	
@@ -98,6 +107,7 @@ public class SwerveModule extends PIDSubsystem
 		SmartDashboard.putNumber("Swerve Module " + id + " Heading", heading);
 		SmartDashboard.putNumber("Swerve Module " + id + " Encoder", encoder.get());
 	}
+	
 	@Override
 	protected double returnPIDInput()
 	{

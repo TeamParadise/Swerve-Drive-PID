@@ -11,8 +11,12 @@ public class AutoTest1 extends CommandGroup {
 
     public AutoTest1()
     {
-    	addSequential(new DriveStraight(0.3, 360), 1);
-    	addSequential(new DriveStraight(0.3, 90), .5);
-    	addSequential(new DriveStraight(0.3, 330), .5);
+//    	addSequential(new DriveStraight(0.3, 270), 1);
+//    	addSequential(new DriveStraight(0.3, 180), 1);
+//    	addSequential(new DriveStraight(0.3, 45), Math.sqrt(2));
+
+    	addSequential(new DriveStraight(0.3, 0), 1);
+    	addSequential(new DriveStraight(0.3, 90), 1);
+    	addSequential(new DriveStraight(0.3, 225), Math.sqrt(2));
     }
 }
